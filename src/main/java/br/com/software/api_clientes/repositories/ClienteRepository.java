@@ -37,7 +37,7 @@ public class ClienteRepository {
         try (var connection = factory.createConnection()) {
 
             var sql = """
-                    update clientes set name=?, email=?, cpf=?, telefone=?
+                    update clientes set nome=?, email=?, cpf=?, telefone=?
                     where id=? and ativo = 1
                     """;
 

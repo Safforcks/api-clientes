@@ -36,10 +36,11 @@ public class ClienteController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> put(@RequestBody Map<String, String> dados) {
+    public ResponseEntity<?> put(@PathVariable UUID id, @RequestBody Map<String, String> dados) {
 
         var cliente = new Cliente();
 
+        cliente.setId(id);
         cliente.setNome(dados.get("nome"));
         cliente.setEmail(dados.get("email"));
         cliente.setCpf(dados.get("cpf"));

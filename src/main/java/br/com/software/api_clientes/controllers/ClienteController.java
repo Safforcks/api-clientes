@@ -89,4 +89,20 @@ public class ClienteController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> getById(@PathVariable UUID id) {
+
+        try {
+
+            var clienteRepository = new ClienteRepository();
+            var cliente = clienteRepository.obterPorid(id);
+
+            return ResponseEntity.ok(cliente);
+        }
+        catch(Exception e) {
+
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }

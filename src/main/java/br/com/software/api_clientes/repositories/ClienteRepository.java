@@ -3,6 +3,8 @@ package br.com.software.api_clientes.repositories;
 import br.com.software.api_clientes.entities.Cliente;
 import br.com.software.api_clientes.factories.ConnectionFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ClienteRepository {
@@ -60,6 +62,38 @@ public class ClienteRepository {
             var statement = connection.prepareStatement(sql);
             statement.setObject(1, id);
             return statement.executeUpdate() > 0;
+        }
+    }
+
+    public List<Cliente> obterTodos() throws Exception {
+
+        var factory = new ConnectionFactory();
+
+        try (var connection = factory.createConnection()) {
+
+            var sql = """
+                    select id, nome, email, cpf, telefone
+                    from clientes where ativo = 1
+                    """;
+
+            var statement = connection.prepareStatement(sql);
+            var result = statement.executeQuery();
+
+            var lista = new ArrayList<Cliente>();
+
+            while (result.next()) {
+                var cliente = new Cliente();
+
+                cliente.setId(UUID.fromString(result.getString("id")));
+                cliente.setNome(result.getString("nome"));
+                cliente.setEmail(result.getString("email"));
+                cliente.setTelefone(result.getString("telefone"));
+                cliente.setCpf(result.getString("cpf"));
+
+                lista.add(cliente);
+            }
+
+            return lista;
         }
     }
 }

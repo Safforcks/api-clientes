@@ -76,5 +76,17 @@ public class ClienteController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAll() {
 
+        try {
+
+            var clienteRepository = new ClienteRepository();
+            var clientes = clienteRepository.obterTodos();
+
+            return ResponseEntity.ok(clientes);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }

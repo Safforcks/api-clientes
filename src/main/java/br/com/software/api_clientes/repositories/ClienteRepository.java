@@ -96,4 +96,36 @@ public class ClienteRepository {
             return lista;
         }
     }
+
+    public Cliente obterPorid(UUID id) throws Exception {
+
+        var factory = new ConnectionFactory();
+
+        try (var connection = factory.createConnection()) {
+
+            var sql = """
+                    select id, nome, email, cpf, telefone
+                    from clientes where id=? and ativo = 1
+                    """;
+
+            var statement = connection.prepareStatement(sql);
+            statement.setObject(1, id);
+            var result = statement.executeQuery();
+
+
+            if (result.next()) {
+                var cliente = new Cliente();
+
+                cliente.setId(UUID.fromString(result.getString("id")));
+                cliente.setNome(result.getString("nome"));
+                cliente.setEmail(result.getString("email"));
+                cliente.setCpf(result.getString("cpf"));
+                cliente.setTelefone(result.getString("telefone"));
+
+                return cliente;
+            } else {
+                return null;
+            }
+        }
+    }
 }

@@ -60,7 +60,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> delete(@PatchMapping UUID id) {
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
 
         try {
 

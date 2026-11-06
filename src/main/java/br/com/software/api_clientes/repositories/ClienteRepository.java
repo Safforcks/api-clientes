@@ -25,4 +25,25 @@ public class ClienteRepository {
             statement.execute();
         }
     }
+
+    public boolean atualizar(Cliente cliente) throws Exception {
+
+        var factory = new ConnectionFactory();
+
+        try (var connection = factory.createConnection()) {
+
+            var sql = """
+                    update clientes set name=?, email=?, cpf=?, telefone=?
+                    where id=?
+                    """;
+
+            var statement = connection.prepareStatement(sql);
+            statement.setString(1, cliente.getNome());
+            statement.setString(2, cliente.getEmail());
+            statement.setString(3, cliente.getCpf());
+            statement.setString(4, cliente.getTelefone());
+            statement.setObject(5, cliente.getId());
+            return statement.executeUpdate() > 0;
+        }
+    }
 }

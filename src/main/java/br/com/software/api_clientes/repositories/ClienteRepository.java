@@ -3,6 +3,8 @@ package br.com.software.api_clientes.repositories;
 import br.com.software.api_clientes.entities.Cliente;
 import br.com.software.api_clientes.factories.ConnectionFactory;
 
+import java.util.UUID;
+
 public class ClienteRepository {
 
     public void inserir(Cliente cliente) throws Exception {
@@ -34,7 +36,7 @@ public class ClienteRepository {
 
             var sql = """
                     update clientes set name=?, email=?, cpf=?, telefone=?
-                    where id=?
+                    where id=? and ativo = 1
                     """;
 
             var statement = connection.prepareStatement(sql);
@@ -43,6 +45,20 @@ public class ClienteRepository {
             statement.setString(3, cliente.getCpf());
             statement.setString(4, cliente.getTelefone());
             statement.setObject(5, cliente.getId());
+            return statement.executeUpdate() > 0;
+        }
+    }
+
+    public boolean excluir(UUID id) throws Exception {
+
+        var factory = new ConnectionFactory();
+
+        try (var connection = factory.createConnection()) {
+
+            var sql = "update clientes set ativo = 0 where id=? and ativo = 1";
+
+            var statement = connection.prepareStatement(sql);
+            statement.setObject(1, id);
             return statement.executeUpdate() > 0;
         }
     }

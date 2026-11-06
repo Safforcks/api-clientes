@@ -52,10 +52,29 @@ public class ClienteController {
             if (clienteRepository.atualizar(cliente)) {
                 return ResponseEntity.ok("Cliente atualizado com sucesso.");
             } else {
-                return ResponseEntity.status(404).body("Cliente não encotrado para edição.");
+                return ResponseEntity.status(404).body("Cliente não encontrado para edição.");
             }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> delete(@PatchMapping UUID id) {
+
+        try {
+
+            var clienteRepository = new ClienteRepository();
+
+            if (clienteRepository.excluir(id)) {
+                return ResponseEntity.ok("Cliente excluido com sucesso");
+            } else {
+                return ResponseEntity.status(404).body("Cliente não encontrado para exclusão.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+
 }
